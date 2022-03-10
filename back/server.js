@@ -1,15 +1,20 @@
-const { urlencoded } = require("express");
 const express = require("express");
+const { urlencoded } = require("express");
+const cors = require("cors");
 
 const app = express();
-const port = 3000;
+const port = 3001;
 const mongoose = require("mongoose");
 
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
+app.use(cors());
 
-const wilderController = require("./controller/Wilder");
+//===Routes
+const setupRoutes = require("./routes/index");
+setupRoutes(app);
 
+//===Mongoose connection
 mongoose
   .connect("mongodb://127.0.0.1:27017/wilder", {
     autoIndex: true,
@@ -21,14 +26,9 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get("/api/wilder", wilderController.findAll);
-app.get("/api/wilder/:id", wilderController.findOne)
-app.post("/api/wilder/create", wilderController.create);
-app.delete("/api/wilder/:id", wilderController.deleteById)
-app.put("/api/wilder/:id", wilderController.update);
-
 app.use((req, res, next) => {
   res.status(404).send("Sorry can't find that!");
 });
+
 //Start Server
 app.listen(port, () => console.log(`Server started on ${port}`));

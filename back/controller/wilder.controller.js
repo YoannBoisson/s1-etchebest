@@ -1,5 +1,5 @@
 const res = require("express/lib/response");
-const WilderModel = require("../models/Wilder");
+const WilderModel = require("../models/wilder.models");
 
 const create = async (req, res) => {
   try {
